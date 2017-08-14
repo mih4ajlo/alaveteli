@@ -148,7 +148,7 @@ describe User::SessionController do
       end
 
       it 'redirects to the post redirect uri' do
-        expect(response).to redirect_to('/?post_redirect=1')
+        expect(response).to redirect_to('/?post_redirect=1&context=confirm')
       end
 
     end
@@ -220,7 +220,8 @@ describe User::SessionController do
 
       it 'redirects to the post redirect uri' do
         expect(response).
-          to redirect_to('/profile/change_password?post_redirect=1')
+          to redirect_to('/profile/change_password?' \
+                         'post_redirect=1&context=confirm')
       end
 
     end
@@ -249,7 +250,7 @@ describe User::SessionController do
       end
 
       it 'redirects to the post redirect uri' do
-        expect(response).to redirect_to('/?post_redirect=1')
+        expect(response).to redirect_to('/?post_redirect=1&context=confirm')
       end
 
     end
@@ -280,7 +281,7 @@ describe User::SessionController do
       end
 
       it 'redirects to the post redirect uri' do
-        expect(response).to redirect_to('/?post_redirect=1')
+        expect(response).to redirect_to('/?post_redirect=1&context=confirm')
       end
 
     end
@@ -312,7 +313,7 @@ describe User::SessionController do
       end
 
       it 'redirects to the post redirect uri' do
-        expect(response).to redirect_to('/?post_redirect=1')
+        expect(response).to redirect_to('/?post_redirect=1&context=confirm')
       end
 
     end
@@ -339,7 +340,7 @@ describe User::SessionController do
       end
 
       it 'redirects to the post redirect uri' do
-        expect(response).to redirect_to('/?post_redirect=1')
+        expect(response).to redirect_to('/?post_redirect=1&context=confirm')
       end
 
     end

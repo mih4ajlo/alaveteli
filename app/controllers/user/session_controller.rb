@@ -28,7 +28,7 @@ class User::SessionController < UserController
         if is_modal_dialog
           render :template => 'show'
         else
-          do_post_redirect @post_redirect, @user_signin
+          do_post_redirect @post_redirect, @user_signin, :signin
         end
       else
         send_confirmation_mail @user_signin
@@ -80,8 +80,7 @@ class User::SessionController < UserController
     end
 
     session[:user_circumstance] = post_redirect.circumstance
-
-    do_post_redirect post_redirect, @user
+    do_post_redirect post_redirect, @user, :confirm
   end
 
   private
