@@ -28,6 +28,7 @@
   a daemon from the `poll-for-incoming-debian.example` template will
   cause Alaveteli to poll a mailbox for incoming mail via POP, in addition to
   passively accepting mail piped into the application via `script/mailin` (Louise Crow)
+* You can now filter users by their role on the admin user list page (Louise Crow)
 
 ## Upgrade Notes
 
