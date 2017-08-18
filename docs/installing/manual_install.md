@@ -468,6 +468,12 @@ useful to you. This example sends cron output to the local `alaveteli` user. Cha
     chown root:alaveteli /etc/cron.d/alaveteli
     chmod 754 /etc/cron.d/alaveteli
 
+Note: If you are generating the crontab manually, rather than with this rake task,
+you will need to add a line to periodically check on each daemon you install following
+the instructions below, as follows:
+
+    5,15,25,35,45,55 * * * * alaveteli /etc/init.d/alaveteli-alert-tracks check
+
 ### Generate application daemon
 
 Generate a daemon based on the application server you installed. This allows you
