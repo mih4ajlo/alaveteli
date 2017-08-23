@@ -2,6 +2,10 @@
 
 ## Highlighted Features
 
+* Added some extra margin space to the `#logged_in_bar` when javascript is
+  disabled to avoid the user's name from overlapping the 'Sign out' link -
+  otherwise if there is enough space to do so, the secondary menu will try to
+  float alongside the nav bar content (Liz Conlan)
 * Removed non-responsive assets (Gareth Rees)
 * Upgrade to Rails 4.2 (Liz Conlan, Gareth Rees)
 * Fixed problem where the routing filter doesn't recognise default locales with
