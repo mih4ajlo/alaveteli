@@ -66,6 +66,9 @@ class AlaveteliPro::SubscriptionsController < ApplicationController
     redirect_to alaveteli_pro_dashboard_path
   end
 
+  def index
+  end
+
   private
 
   def authenticate
