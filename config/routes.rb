@@ -623,6 +623,10 @@ Rails.application.routes.draw do
       :as => :create_pro_account_request,
       :via => :post
 
+    match '/subscription/update' => 'alaveteli_pro/subscriptions#update',
+          :as => :update_subscription,
+          :via => :post
+
     match '/account' => 'alaveteli_pro/subscriptions#index',
           :as => :account,
           :via => :get
