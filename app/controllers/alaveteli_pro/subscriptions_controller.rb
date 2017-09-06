@@ -71,17 +71,6 @@ class AlaveteliPro::SubscriptionsController < ApplicationController
                   retrieve(current_user.pro_account.stripe_customer_id)
   end
 
-  def update
-    token = Stripe::Token.retrieve(params[:stripeToken])
-    customer = Stripe::Customer.
-                  retrieve(current_user.pro_account.stripe_customer_id)
-    customer.sources.create(source: token)
-
-    customer.sources.retrieve(params[:old_card_id]).delete
-
-    redirect_to account_path
-  end
-
   private
 
   def authenticate

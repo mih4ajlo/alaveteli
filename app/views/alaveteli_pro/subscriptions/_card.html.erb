@@ -7,7 +7,7 @@
   <% end %>
   <%= card_expiry_message(card.exp_month, card.exp_year) %>
 
-  <%= form_tag(update_subscription_path) do %>
+  <%= form_tag(update_subscription_payment_path) do %>
 
     <%= hidden_field_tag 'old_card_id', card.id %>
 
