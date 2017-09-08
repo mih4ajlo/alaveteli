@@ -14,7 +14,7 @@ class AlaveteliPro::PlanWithTax < SimpleDelegator
   TAX_RATE = BigDecimal('0.20').freeze
 
   def amount_with_tax
-    net = BigDecimal(amount * 0.01, 0).round(2)
+    net = BigDecimal((amount * 0.01), 0).round(2)
     vat = (net * TAX_RATE).round(2)
     gross = net + vat
     (gross * 100).floor
