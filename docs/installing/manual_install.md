@@ -248,9 +248,11 @@ You should see a warning telling you that gem executables will not run as the ap
 user doesn't have their local gem bin path in their path. Add it, making sure you use the ruby version
 directory you see in the warning message:
 
-    cat >> /home/alaveteli/.bashrc <<EOF
-    export PATH="\$HOME/.gem/ruby/1.9.1/bin:\$PATH"
-    EOF
+<pre><code>cat >> /home/alaveteli/.bashrc <<EOF
+export PATH="\$HOME/.gem/ruby/1.9.1/bin:\$PATH"
+EOF
+exec $SHELL</code></pre>
+
 </div>
 
 ## Configure Database
