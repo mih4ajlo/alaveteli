@@ -123,7 +123,6 @@ describe AdminUserController do
       user.add_role :admin
       get :index, :roles => [ 'admin', 'pro' ]
       expect(assigns[:admin_users]).to eq([user])
-
     end
 
   end
