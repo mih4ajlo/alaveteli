@@ -4,6 +4,8 @@ require 'stripe_mock'
 
 describe AlaveteliPro::PaymentMethodsController do
   let(:stripe_helper) { StripeMock.create_test_helper }
+  let(:user_token) { stripe_helper.generate_card_token }
+  let(:new_token) { stripe_helper.generate_card_token}
 
   before do
     StripeMock.start
@@ -34,40 +36,49 @@ describe AlaveteliPro::PaymentMethodsController do
 
       let(:customer) do
         customer = Stripe::Customer.
-                     create(email: user.email,
-                            source: stripe_helper.generate_card_token)
+                     create(email: user.email, source: user_token)
         user.pro_account.stripe_customer_id = customer.id
         user.pro_account.save
         customer
       end
 
-      let(:token) { stripe_helper.generate_card_token }
       let(:old_card_id) { customer.sources.first.id }
 
       before do
         session[:user_id] = user.id
-        post :update, 'stripeToken' => token,
-                      'old_card_id' => old_card_id
       end
 
       it 'finds the card token' do
-        expect(assigns(:token).id).to eq(token)
+        post :update, 'stripeToken' => new_token,
+                      'old_card_id' => old_card_id
+        expect(assigns(:token).id).to eq(new_token)
       end
 
       it 'finds the id of the card being updated' do
+        post :update, 'stripeToken' => new_token,
+                      'old_card_id' => old_card_id
         expect(assigns(:old_card_id)).to eq(old_card_id)
       end
 
       it 'retrieves the correct Stripe customer' do
+        post :update, 'stripeToken' => new_token,
+                      'old_card_id' => old_card_id
         expect(assigns(:customer).id).
           to eq(user.pro_account.stripe_customer_id)
       end
 
       it 'redirects to the account page' do
+        post :update, 'stripeToken' => new_token,
+                      'old_card_id' => old_card_id
         expect(response).to redirect_to(account_path)
       end
 
       context 'with a successful transaction' do
+
+        before do
+          post :update, 'stripeToken' => new_token,
+                        'old_card_id' => old_card_id
+        end
 
         it 'adds the new card to the Stripe customer' do
           reloaded = Stripe::Customer.
@@ -85,6 +96,52 @@ describe AlaveteliPro::PaymentMethodsController do
 
         it 'shows a message to confirm the update' do
           expect(flash[:notice]).to eq('Your payment details have been updated')
+        end
+
+      end
+
+      context 'when the card is declined' do
+
+        before do
+          StripeMock.prepare_card_error(:card_declined, :create_source)
+
+          post :update, 'stripeToken' => new_token,
+                        'old_card_id' => old_card_id
+        end
+
+        it 'renders the card error message' do
+          expect(flash[:error]).to eq('The card was declined')
+        end
+
+        it 'does not update the stored payment methods' do
+          reloaded = Stripe::Customer.
+                       retrieve(user.pro_account.stripe_customer_id)
+          expect(reloaded.sources.data.map(&:id)).
+            to include(old_card_id)
+        end
+
+      end
+
+      context 'when we are rate limited' do
+
+        before do
+          error = Stripe::RateLimitError.new
+          StripeMock.prepare_error(error, :create_source)
+          post :update, 'stripeToken' => new_token,
+                        'old_card_id' => old_card_id
+        end
+
+        it 'sends an exception email' do
+          mail = ActionMailer::Base.deliveries.first
+          expect(mail.subject).to match(/Stripe::RateLimitError/)
+        end
+
+        it 'renders an error message' do
+          expect(flash[:error]).to match(/There was a problem/)
+        end
+
+        it 'redirects to the plan page' do
+          expect(response).to redirect_to(account_path)
         end
 
       end
