@@ -470,9 +470,10 @@ useful to you. This example sends cron output to the local `alaveteli` user. Cha
 
 Note: If you are generating the crontab manually, rather than with this rake task,
 you will need to add a line to periodically check on each daemon you install following
-the instructions below, as follows:
+the instructions below, as follows, making sure to replace DAEMON_NAME with the name
+of the daemon file:
 
-    5,15,25,35,45,55 * * * * alaveteli /etc/init.d/alaveteli-alert-tracks check
+    5,15,25,35,45,55 * * * * alaveteli /etc/init.d/DAEMON_NAME check
 
 ### Generate application daemon
 
