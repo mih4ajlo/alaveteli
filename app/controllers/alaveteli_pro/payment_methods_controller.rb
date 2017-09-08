@@ -3,12 +3,14 @@ class AlaveteliPro::PaymentMethodsController < AlaveteliPro::BaseController
   before_filter :authenticate
 
   def update
-    token = Stripe::Token.retrieve(params[:stripeToken])
-    customer = Stripe::Customer.
+    @token = Stripe::Token.retrieve(params[:stripeToken])
+    @old_card_id = params[:old_card_id]
+    @customer = Stripe::Customer.
                   retrieve(current_user.pro_account.stripe_customer_id)
-    customer.sources.create(source: token)
 
-    customer.sources.retrieve(params[:old_card_id]).delete
+    @customer.sources.create(source: @token.id)
+    @customer.sources.retrieve(@old_card_id).delete
+    flash[:notice] = _('Your payment details have been updated')
 
     redirect_to account_path
   end
